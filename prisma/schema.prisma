@@ -1,14 +1,256 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASEURL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  expires      DateTime
+  sessionToken String   @unique
+  accessToken  String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @unique @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
+  imgKey        String?
+  bio           String?
+  showinfo      Boolean?
+  admin         Boolean   @default(false)
+  username      String?
+  accounts      Account[]
+  blogs         Blog[]
+  posts         Post[]
+  sessions      Session?
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Blog {
+  id         Int         @id @default(autoincrement())
+  name       String
+  title      String?
+  desc       String
+  img        String?
+  attr       String
+  eleId      String?
+  class      String?
+  inner_html String?
+  cssText    String?
+  imgKey     String?
+  imgBgKey   String?
+  user_id    String
+  date       DateTime    @updatedAt
+  show       Boolean
+  username   String?
+  rating     Int
+  user       User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  charts     Chart[]
+  codes      Code[]
+  elements   Element[]
+  messages   Message[]
+  pageCounts PageCount[]
+  selectors  Selector[]
+}
+
+model Selector {
+  id         Int       @id @default(autoincrement())
+  placement  Int
+  name       String
+  eleId      String
+  class      String
+  inner_html String?
+  cssText    String
+  rowNum     Int
+  colNum     Int
+  blog_id    Int
+  header     Boolean
+  footer     Boolean
+  headerType String?
+  colAttr    ColAttr[]
+  rows       Row[]
+  blog       Blog      @relation(fields: [blog_id], references: [id], onDelete: Cascade)
+}
+
+model ColAttr {
+  id          Int      @id @default(autoincrement())
+  T           Int
+  B           Int
+  selector_id Int
+  selector    Selector @relation(fields: [selector_id], references: [id], onDelete: Cascade)
+}
+
+model Row {
+  id          Int      @id @default(autoincrement())
+  name        String
+  eleId       String
+  class       String
+  inner_html  String?
+  imgKey      String?
+  cssText     String
+  selector_id Int
+  order       Int
+  cols        Col[]
+  selector    Selector @relation(fields: [selector_id], references: [id], onDelete: Cascade)
+}
+
+model Col {
+  id         Int           @id @default(autoincrement())
+  name       String
+  eleId      String
+  class      String
+  inner_html String?
+  imgKey     String?
+  cssText    String
+  row_id     Int
+  order      Int
+  row        Row           @relation(fields: [row_id], references: [id], onDelete: Cascade)
+  elements   Element_sel[]
+}
+
+model Element_sel {
+  id         Int     @id @default(autoincrement())
+  placement  Int?
+  name       String
+  eleId      String
+  class      String
+  inner_html String
+  cssText    String
+  attr       String?
+  selectorId Int?
+  img        String?
+  imgKey     String?
+  col_id     Int
+  order      Int
+  col        Col     @relation(fields: [col_id], references: [id], onDelete: Cascade)
+}
+
+model Element {
+  id         Int     @id @default(autoincrement())
+  placement  Int
+  name       String
+  eleId      String
+  class      String
+  inner_html String
+  cssText    String
+  attr       String?
+  img        String?
+  imgKey     String?
+  blog_id    Int
+  blog       Blog    @relation(fields: [blog_id], references: [id], onDelete: Cascade)
+}
+
+model Code {
+  id         Int        @id @default(autoincrement())
+  placement  Int?
+  name       String
+  eleId      String
+  class      String
+  inner_html String
+  cssText    String
+  blog_id    Int
+  img        String
+  template   String
+  type       String
+  blog       Blog       @relation(fields: [blog_id], references: [id], onDelete: Cascade)
+  linecode   Linecode[]
+}
+
+model Linecode {
+  id      Int    @id @default(autoincrement())
+  text    String
+  code_id Int
+  code    Code   @relation(fields: [code_id], references: [id], onDelete: Cascade)
+}
+
+model Chart {
+  id          Int    @id @default(autoincrement())
+  blog_id     Int
+  placement   Int
+  chartOption String
+  type        String
+  eleId       String
+  blog        Blog   @relation(fields: [blog_id], references: [id], onDelete: Cascade)
+}
+
+model Message {
+  id      Int      @id @default(autoincrement())
+  rate    Int
+  name    String
+  email   String
+  msg     String
+  user_id String?
+  blog_id Int?
+  date    DateTime @default(now())
+  secret  Boolean
+  sent    Boolean
+  blog    Blog?    @relation(fields: [blog_id], references: [id], onDelete: Cascade)
+}
+
+model DeletedImg {
+  id     Int      @id @default(autoincrement())
+  count  Int?
+  imgKey String   @unique
+  del    Boolean
+  date   DateTime @default(now())
+
+  @@unique([imgKey, id])
+}
+
+model PageCount {
+  id      Int    @id @default(autoincrement())
+  name    String @unique
+  count   Int    @default(autoincrement())
+  blog_id Int?
+  blog    Blog?  @relation(fields: [blog_id], references: [id], onDelete: Cascade)
+
+  @@unique([name, id])
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+  date      DateTime @default(now())
+  userId    String
+  imageKey  String?
+  link      String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

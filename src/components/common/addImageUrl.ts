@@ -81,6 +81,7 @@ class AddImageUrl {
         this.imgEles=[];
     }
 
+
     async main(item:{parent:HTMLElement,blog:blogType}){
         const {parent,blog}=item;
         this._modSelector.blog=blog;

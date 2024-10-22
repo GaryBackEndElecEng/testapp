@@ -14,10 +14,11 @@ import MainHeader from "../nav/mainHeader";
 
 class Service {
     awsimgUrl:string="/api/awsimg";
+    newmasterUrl:string="https://newmasterbucket-302619268814.s3-accesspoint.ca-central-1.amazonaws.com";
     liveonoffUrl:string="/api/liveonoff";
     newBlogUrl:string="/api/blog/createNew"
-    images:string="https://newmasterconnect.herokuapp.com/api/category/";
-    category:string="https://newmasterconnect.herokuapp.com/api/category/";
+    // images:string="https://newmasterconnect.herokuapp.com/api/category/";
+    // category:string="https://newmasterconnect.herokuapp.com/api/category/";
     urlUpload="/api/uploadImage";
     urlBlog:string="/api/blog";
     urlsaveBlog:string="/api/savegetblog";
@@ -64,6 +65,17 @@ class Service {
         this.user=this._modSelector._user;
     }
 ///GETTERS SETTERS///////////////////
+ getNewmaster(){
+    const option={
+        headers:{"Content-Type":"application/json"},
+        method:"Get"
+    }
+    return fetch(this.newmasterUrl).then(async(res)=>{
+        if(res){
+            return await res.json() as any;
+        }
+    });
+ }
     saveItems(blog:blogType):blogType{
         const show=blog.show;
         const username=blog.username;
@@ -455,18 +467,30 @@ class Service {
         
    }
    async peronalInfo(){
-    const option={
-        headers:{
-            "Content-Type":"application/json"
-        },
-        method:"GET"
-    }
-    return fetch(this.category,option).then(async(res)=>{
-        if(res){
-            const body= await res.json() as categoryListType[];
-            const general:generalInfoType=(body).filter((obj)=>(obj.name==="GeneralInfo"))[0].categoryGeneralInfo[0];
-            return general
-        }
+    
+    return new Promise(resolve=>{
+            const general:generalInfoType= {
+                id: 2,
+                name: "Gary Wallace",
+                address: "21 Rue St-Jean",
+                cell: "416-917-5768",
+                country: "CA",
+                provState: "ON",
+                city: "Chateauguay",
+                postal: "L4C-1K8",
+                extra: "Business hours: mon-Fri, 9-6pm",
+                siteArray: [
+                    "fb:: https://www.facebook.com/people/Master-Connect/100077971323770/",
+                    "linkedin:: https://www.linkedin.com/in/gary-wallace-501513229/",
+                    "masterconnect:: https://www.masterconnect.ca",
+                    "master-connect.ca:: https://www.master-connect.ca",
+                    ".com:: https://www.master-connect.com",
+                    "email::masterconnect919@gmail.com",
+                    "github:: https://github.com/GaryBackEndElecEng",
+                    "instagram::https://www.instagram.com/garysjwallacedeveloper/?next=%2F"
+                ]
+            };
+            resolve( general)       
     }) as Promise<generalInfoType | undefined>;
    }
    
@@ -790,23 +814,23 @@ class Service {
             console.error(msg);
         });
     }
-    async getImages(){
-        const option={
-            headers:{
-            "Content-Type":"application/json",
-            },
-            method:"GET"
-        }
-        return fetch(this.images,option).then(async(res)=>{
-            if(res){
-                const body:any= await res.json() as any;
-                const imageCat=body.filter(obj=>(obj.name==="extraImages"))[0]?.imageCategory as imageType[];
-                const imageCat2=body.filter(obj=>(obj.name==="FlowerShop"))[0]?.imageCategory as imageType[];
-                return imageCat.concat(imageCat2);
-            }
-        });
-        //FlowerShop
-    }
+    // async getImages(){
+    //     const option={
+    //         headers:{
+    //         "Content-Type":"application/json",
+    //         },
+    //         method:"GET"
+    //     }
+    //     return fetch(this.images,option).then(async(res)=>{
+    //         if(res){
+    //             const body:any= await res.json() as any;
+    //             const imageCat=body.filter(obj=>(obj.name==="extraImages"))[0]?.imageCategory as imageType[];
+    //             const imageCat2=body.filter(obj=>(obj.name==="FlowerShop"))[0]?.imageCategory as imageType[];
+    //             return imageCat.concat(imageCat2);
+    //         }
+    //     });
+    //     //FlowerShop
+    // }
 
     async registerUser(user:userType):Promise<userType|void>{
         if(!user) return;

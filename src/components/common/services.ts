@@ -253,7 +253,7 @@ class Service {
                 if(res.ok){
                     const formdata_key=formData.get("Key") as string;
                     //store key//
-                    const store:deletedImgType={id:undefined,Key:formdata_key,del:false,date:new Date()}
+                    const store:deletedImgType={id:undefined,imgKey:formdata_key,del:false,date:new Date()}
                     await this.storeKey(store)
                     //store key//
                     //GETTING IMAGE URL////////
@@ -538,8 +538,8 @@ class Service {
     }
     async storeKey(store:deletedImgType):Promise<void | deletedImgType>{
         //EXECUTES ONLY IF DEL=FALSE && KEY EXIST.IT STORES KEY IN DeletedImg table
-        const {Key,del}=store;
-        if(!del && Key){
+        const {imgKey,del}=store;
+        if(!del && imgKey){
             const option={
                 headers:{
                     "Content-Type":"application/json"
@@ -557,8 +557,8 @@ class Service {
     }
     async markDelKey(item:deletedImgType):Promise<void | deletedImgType>{
         // DEL=TRUE  AND KEY EXIST FOR DELETE: it does not delete item from the db (DeletedImg table) only changes its del state. it deletes teh image fro aws
-        const {del,Key}=item;
-        if(del && Key){
+        const {del,imgKey}=item;
+        if(del && imgKey){
             const option={
                 headers:{
                     "Content-Type":"application/json"

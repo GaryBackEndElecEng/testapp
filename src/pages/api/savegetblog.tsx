@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { blogType, selectorType, element_selType, elementType, codeType, rowType, colType, chartType } from "@/components/editor/Types";
 import { getErrorMessage } from "@/lib/errorBoundaries";
-import "@aws-sdk/signature-v4-crt";
 import { findCountKeys } from "@/lib/ultils/functions";
 
 const prisma = new PrismaClient();
@@ -186,10 +185,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     newBlog = { ...blog, selectors: updateSelects, elements: update_elements, codes: update_codes, charts: update_charts } as blogType;
                     await findCountKeys(blog as unknown as blogType); //adds count to imgKeys
                     res.status(200).json(newBlog);
-                    return await prisma.$disconnect();
                 } else {
                     res.status(400).json({ message: "no body provided" });
-                    return await prisma.$disconnect();
                 }
 
 
@@ -209,21 +206,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             const blogs = await prisma.blog.findMany({
                 where: { show: true },
-                select: {
-                    id: true,
-                    name: true,
-                    title: true,
-                    desc: true,
-                    img: true,
-                    attr: true,
-                    rating: true,
-                    imgKey: true,
-                    date: true,
-                    show: true,
-                    username: true,
-                    messages: true
-
-                }
             }) as unknown[] as blogType[];
             // const blogsWithImgs = await getUserBlogsImgs(blogs);
             res.status(200).json(blogs)
@@ -261,6 +243,7 @@ async function rows(selector: selectorType) {
         }
 
     }) : [] as rowType[]) as unknown[] as rowType[];
+    await prisma.$disconnect();
     return tempRows
 }
 async function cols(row: rowType, row_id: number) {
@@ -282,6 +265,7 @@ async function cols(row: rowType, row_id: number) {
         col = { ...col, elements: elements_ }
         return col;
     }) : [] as colType[]);
+    await prisma.$disconnect();
     return tempCols as unknown as colType[];
 };
 async function Elements(col: colType, col_id: number, selector_id: number) {
@@ -305,6 +289,7 @@ async function Elements(col: colType, col_id: number, selector_id: number) {
         ele = { ...ele, id: ele_.id, col_id: col_id }
         return ele;
     }) : [] as element_selType[]) as unknown[] as element_selType[];
+    await prisma.$disconnect();
     return tempEles
 }
 

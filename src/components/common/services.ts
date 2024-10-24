@@ -814,23 +814,7 @@ class Service {
             console.error(msg);
         });
     }
-    // async getImages(){
-    //     const option={
-    //         headers:{
-    //         "Content-Type":"application/json",
-    //         },
-    //         method:"GET"
-    //     }
-    //     return fetch(this.images,option).then(async(res)=>{
-    //         if(res){
-    //             const body:any= await res.json() as any;
-    //             const imageCat=body.filter(obj=>(obj.name==="extraImages"))[0]?.imageCategory as imageType[];
-    //             const imageCat2=body.filter(obj=>(obj.name==="FlowerShop"))[0]?.imageCategory as imageType[];
-    //             return imageCat.concat(imageCat2);
-    //         }
-    //     });
-    //     //FlowerShop
-    // }
+   
 
     async registerUser(user:userType):Promise<userType|void>{
         if(!user) return;

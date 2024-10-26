@@ -50,6 +50,7 @@ _onlyMeta:boolean=false;
  static _showOn:boolean;
  _showMeta=false;
  printThis:boolean;
+ static noBlogText:string;
     constructor(private _modSelector:ModSelector,private _service:Service,private _user:User,private _shapeOutside:ShapeOutside,private _code:NewCode,private chart:ChartJS,private _message:Message){
         this.count=0;
         this.mainSection=document.querySelector("section#main");
@@ -70,6 +71,17 @@ _onlyMeta:boolean=false;
         DisplayBlog._showOn=true;
         this._blog={} as blogType;
         this.reference=new Reference(this._modSelector);
+        DisplayBlog.noBlogText=`<span>sorry there are no blogs just yet. Be the first to create a blog.</span><span> We garrantee data preservation, with the following advantage:</span>
+    <ul> <pre>
+   <li style="text-wrap:wrap;"> You can create your own flamboyant poster and or design</li>
+   <li style="text-wrap:wrap;"> Your post and or poster are small format compatible, meaning you can print your site as a blog or web-site and or poster fitting ( smat phone and or Ipad format)</li>
+   <li style="text-wrap:wrap;"> its absolutely free with tight security protocol to protect your information.</li>
+   </pre>
+   </ul>
+   <blockquote>
+   <pre style="font-style:italic"> "to create is to learn and grow",,, <span style="font-size:22px;font-weight:bold">try it out</span><span style="color:red;font-weight:bold;font-size:30px;margin-right:1rem;">!</span></pre>
+   </blockquote>
+   <prev> yours truly Gary Wallace</prev>`;
       
     }
     //GETTERS SETTERS
@@ -1357,6 +1369,25 @@ _onlyMeta:boolean=false;
             
       
        
+    }
+    static noBlog(item:{parent:HTMLElement}){
+        const {parent}=item;
+        const container=document.createElement("section");
+        container.style.cssText=`margin:auto;width:80%;padding-inline:1rem;padding-block:5rem;background-color:${Blogs.bg_color};color:white;border-radius:7px;position:relative;font-size:18px;`;
+        Misc.matchMedia({parent:container,maxWidth:900,cssStyle:{"width":"100%","paddingInline":"5px;","marginBlock":"2rem","paddingBlock":"2rem","maxWidth":"700px"}});
+        const innerCont=document.createElement("div");
+        innerCont.style.cssText="padding:1rem;box-shadow:1px 1px 10px 1px white,-1px -1px 10px 1px whitesmoke;margin:auto;border-radius:inherit;width:100%;position:relative;";
+        const para=document.createElement("p");
+        para.style.cssText="margin:auto;padding:0.5remrem;text-wrap:wrap;font-family:'Playwrite'";
+        para.innerHTML=DisplayBlog.noBlogText;
+        innerCont.appendChild(para);
+        container.appendChild(innerCont);
+        parent.appendChild(container);
+        Misc.fadeIn({anchor:container,xpos:50,ypos:100,time:400});
+        Misc.matchMedia({parent:container,maxWidth:800,cssStyle:{"maxWidth":"700px"}});
+        Misc.matchMedia({parent:container,maxWidth:600,cssStyle:{"maxWidth":"500px"}});
+        Misc.matchMedia({parent:container,maxWidth:460,cssStyle:{"maxWidth":"350px"}});
+
     }
   
 

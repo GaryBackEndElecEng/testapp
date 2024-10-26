@@ -19,11 +19,11 @@ import Message from '../common/message';
 function Index({ id }: { id: number }) {
     const clientRef = React.useRef(null);
     let count: number = 0;
-    const { blog_, setBlog_ } = useEditor();
+    // const { blog_, setBlog_ } = useEditor();
 
 
 
-    React.useMemo(async () => {
+    React.useEffect(() => {
         if (typeof window !== "undefined" && clientRef && id) {
             const url_id = `/api/blog/${id}`;
             const _modSelector = new ModSelector();
@@ -49,30 +49,29 @@ function Index({ id }: { id: number }) {
                     method: "GET"
                 }
 
-                const res = await fetch(url_id, option);
-                if (res.ok && target && count === 0) {
-                    const body = await res.json() as blogType;
-                    setBlog_(body);
-                    const thisBlog = await _modSelector.awaitBlog(body as blogType);
-                    thisBlog.blog();//setting params in modSelector
-                    // const message = new Message(_modSelector, _service, body);
-                    const message = new Message(_modSelector, _service, body);
-                    const displayBlog = new DisplayBlog(_modSelector, _service, user, shapeOutside, code, chart, message);
-                    displayBlog._onlyMeta = true;
-                    await displayBlog.main({ parent: target, blog: body });
-                    count++;
-                }
+                fetch(url_id, option).then(async (res) => {
+                    if (res && target && count === 0) {
+                        const body = await res.json() as blogType;
+                        const thisBlog = await _modSelector.awaitBlog(body as blogType);
+                        thisBlog.blog();//setting params in modSelector
+                        // const message = new Message(_modSelector, _service, body);
+                        const message = new Message(_modSelector, _service, body);
+                        const displayBlog = new DisplayBlog(_modSelector, _service, user, shapeOutside, code, chart, message);
+                        displayBlog._onlyMeta = true;
+                        await displayBlog.main({ parent: target, blog: body });
+                        count++;
+                    } else {
+                        DisplayBlog.noBlog({ parent: target });
+                    }
+                });
+
 
 
             }
         }
 
-    }, [setBlog_, count, id]);
-    React.useEffect(() => {
-        if (blog_) {
+    }, [count, id]);
 
-        }
-    }, [blog_]);
 
     return (
         <div className="container-fluid mx-auto">

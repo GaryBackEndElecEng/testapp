@@ -37,9 +37,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 Key: Key,
 
             }
-            res.status(200).json(retObj)
+            return res.status(200).json(retObj)
         } else {
-            res.status(400).json({ img: null, key: Key })
+            return res.status(200).json({ img: null, key: Key })
         }
     } catch (error) {
         const msg = getErrorMessage(error)

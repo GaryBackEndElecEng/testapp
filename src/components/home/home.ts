@@ -29,7 +29,7 @@ export type arrItemType={
     detail:string
 }
 
-const baseUrl="http://localhost:3000";
+
 
 class Home{
     homeImgs:{id:number,name:string,url:string}[];
@@ -258,7 +258,8 @@ class Home{
                anchor.addEventListener("click",(e:MouseEvent)=>{
                   
                     if(e){
-                        const newUrl=new URL(link.link,baseUrl);
+                        const url=new URL(window.location.href);
+                        const newUrl=new URL(link.link,url.origin);
                         window.location.href=newUrl.href;
                         Nav.navHistory(link.link)
                     }
@@ -497,7 +498,8 @@ class Home{
         const btn=buttonReturn({parent:container,color:"white",bg:this.btnColor,text:"intro",type:"button"});
         btn.addEventListener("click",(e:MouseEvent)=>{
             if(e){
-                this.intro.main(parent,baseUrl);
+                const url=new URL(window.location.href);
+                this.intro.main(parent,url.origin);
             }
         });
     }

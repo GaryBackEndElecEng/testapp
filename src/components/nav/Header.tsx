@@ -18,7 +18,7 @@ export default async function Header() {
     )
 }
 
-async function getUser(item: { session: Session | null }) {
+async function getUser(item: { session: Session | null }): Promise<userType | undefined> {
     const { session } = item;
     if (!session) return;
     const email = session && session?.user?.email;

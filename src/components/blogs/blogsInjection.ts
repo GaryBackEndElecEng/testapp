@@ -11,9 +11,6 @@ import { BsHandThumbsUpFill } from "react-icons/bs";
 import AllMsgs from "../home/allMsgs";
 import Message from "../common/message";
 
-const base_url="http://localhost:3000";
-// const base_url=process.env.BASE_URL as string;
-
 class Blogs{
     bendImg:string="/images/bend.png";
     bendImg1:string="/images/bend1.png";
@@ -38,10 +35,9 @@ _blog:blogType;
 allMsgs:AllMsgs;
 message:Message
     constructor( private _modSelector:ModSelector,private _service:Service){
-        this.baseUrl=base_url;
         this._blogs=[] as blogType[];
         this._blog={} as blogType;
-       this.gbLogo=`${base_url}/images/gb_logo.png`;
+       this.gbLogo=`/images/gb_logo.png`;
        this.logo=`gb_logo.png`;
        this.bgColor=this._modSelector._bgColor;
        this.message=new Message(this._modSelector,this._service,this._modSelector.blog);
@@ -75,7 +71,6 @@ message:Message
 //GETTERS SETTERS
 //main injector ---MAIN INJECTION----
    async showBlogs(parent:HTMLElement,home:boolean,blogs:blogType[]){
-    this.baseUrl=new URL(window.location.href).origin;
     this.blogs=blogs;
     Header.cleanUp(parent);
     const m_block= window.innerWidth < 500 ? "2rem" : "3.25rem";
@@ -145,6 +140,7 @@ message:Message
                     mainRow.appendChild(colBlog);
                     btn.addEventListener("click",(e:MouseEvent)=>{
                         if(e){
+                            this.baseUrl=new URL(window.location.href).origin;
                             const blogUrl=new URL(`/blog/${blog.id}`,this.baseUrl);
                             window.location.href=blogUrl.href; //going to page
                             // this.blog=blog;//feeds it to Mod

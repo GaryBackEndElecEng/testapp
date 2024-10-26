@@ -9,8 +9,6 @@ import AuthService from "@/components/common/auth";
 
 
 export default function Index() {
-    // let window: CustomWindow
-    // const { setBlogs } = useEditor();
     const inRef = React.useRef(null);
     React.useEffect(() => {
 
@@ -20,7 +18,7 @@ export default function Index() {
             const auth = new AuthService(modSelector);
             const service = new Service(modSelector, auth);
             const initBlogs = new Blogs(modSelector, service);
-            const injectBlogs = document.getElementById("injectBlogs");
+            const injectBlogs = document.getElementById("injectBlogs") as HTMLElement;
             const option = {
                 Headers: { "Content-Type": "application/json" },
                 method: "GET"
@@ -34,6 +32,8 @@ export default function Index() {
                         modSelector._blogs = body;
                         await initBlogs.showBlogs(injectBlogs, false, body);
                     }
+                } else {
+                    Blogs.noBlogs({ parent: injectBlogs });
                 }
             });
 

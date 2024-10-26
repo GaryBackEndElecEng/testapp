@@ -158,7 +158,7 @@ message:Message
             parent.appendChild(mainRow)
         }else{
             
-            Blogs.noBlogs(parent);
+            Blogs.noBlogs({parent});
         }
     }
     async displayCard(column:HTMLElement,blog:blogType){
@@ -264,7 +264,8 @@ message:Message
        
 
     }
-     static noBlogs(parent:HTMLElement){
+     static noBlogs(item:{parent:HTMLElement}){
+        const {parent}=item;
         const container=document.createElement("section");
         container.style.cssText=`margin:auto;width:80%;padding-inline:1rem;padding-block:5rem;background-color:${Blogs.bg_color};color:white;border-radius:7px;position:relative;font-size:18px;`;
         Misc.matchMedia({parent:container,maxWidth:900,cssStyle:{"width":"100%","paddingInline":"5px;","marginBlock":"2rem","paddingBlock":"2rem","maxWidth":"700px"}});

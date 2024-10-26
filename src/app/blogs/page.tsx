@@ -1,8 +1,8 @@
 import React from 'react';
-import type { Metadata, ResolvingMetadata } from "next";
+// import type { Metadata, ResolvingMetadata } from "next";
 import Index from "@/components/blogs/Index";
-import Meta from "@/components/meta/meta";
-export const metadata: Metadata = Meta.metaBlogs();
+// import Meta from "@/components/meta/meta";
+// export const metadata: Metadata = Meta.metaBlogs();
 
 type Props = {
     params: { id: string }

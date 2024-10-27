@@ -319,7 +319,7 @@ class Meta{
           
           }
     }
-    static metaChart():Metadata{
+    metaChart():Metadata{
       const kwords=[ "custom charts", "realtime climate change", "make your own graph", "helping you connect", "free Graph making"];
       const metadata:Metadata ={
           title: {
@@ -337,28 +337,28 @@ class Meta{
               "fr-CA": "/fr-CA"
               }
           },
-          openGraph: {
-              title: "Charts",
-              description: 'Customize your chart, free for all',
-              url: "/chart",
-              images: [
-              {
-                  url: "/images/gb_logo.png",
-                  width: 300,
-                  height: 300
-              },
-              {
-                  url: "/images/display/symetric.png",
-                  width: 400,
-                  height: 300
-              },
-              {
-                  url: "https://new-master.s3.ca-central-1.amazonaws.com/static/masterultils/logoLarge.png",
-                  width: 600,
-                  height: 900
-              },
-              ],
-        }
+          // openGraph: {
+          //     title: "Charts",
+          //     description: 'Customize your chart, free for all',
+          //     url: "/chart",
+          //     images: [
+          //     {
+          //         url: "/images/gb_logo.png",
+          //         width: 300,
+          //         height: 300
+          //     },
+          //     {
+          //         url: "/images/display/symetric.png",
+          //         width: 400,
+          //         height: 300
+          //     },
+          //     {
+          //         url: "https://new-master.s3.ca-central-1.amazonaws.com/static/masterultils/logoLarge.png",
+          //         width: 600,
+          //         height: 900
+          //     },
+          //     ],
+          // }
       }
       return metadata;
     }

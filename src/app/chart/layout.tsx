@@ -1,7 +1,8 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Meta from "@/components/meta/meta";
-export const metadata: Metadata = Meta.metaChart();
+const newChart = new Meta();
+export const metadata: Metadata = newChart.metaChart();
 export default function chartlayout({
     children,
 }: {

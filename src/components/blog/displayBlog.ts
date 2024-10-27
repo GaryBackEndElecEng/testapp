@@ -20,18 +20,18 @@ import { RiJavascriptFill } from "react-icons/ri";
 import { TbJson } from "react-icons/tb";
 import ChartJS from "../chart/chartJS";
 
-const baseUrl="http://localhost:3000";
+
 // const baseUrl=process.env.BASE_URL as string;
 
 
 class DisplayBlog{
     count:number;
-    baseUrl:string;
-    url:string="http://localhost:3000/api/blog";
-    signin="http://localhost:3000/api/user";
-    imgLoad="http://localhost:3000/api/imgload";
-    logo:string=baseUrl + "/images/gb_logo.png";
-    logo2:string="gb_logo.png";
+    baseUrl:URL;
+    url:string;
+    signin:string;
+    imgLoad:string;
+    logo:string;
+    logo2:string;
 
 mainSection:HTMLElement|null;
 _blog:blogType;
@@ -55,7 +55,12 @@ _onlyMeta:boolean=false;
         this.count=0;
         this.mainSection=document.querySelector("section#main");
         this.printThis=false;
-        this.baseUrl=baseUrl;
+        this.baseUrl=new URL(window.location.href);
+        this.logo="/images/gb_logo.png";
+        this.logo2="gb_logo.png";
+        this.url="/api/blog";
+        this.signin="/api/user";
+        this.imgLoad="/api/imgload";
         this._bgColor=this._modSelector._bgColor;
         this.btnColor=this._modSelector.btnColor;
         this._blog={} as blogType;
@@ -72,16 +77,16 @@ _onlyMeta:boolean=false;
         this._blog={} as blogType;
         this.reference=new Reference(this._modSelector);
         DisplayBlog.noBlogText=`<span>sorry there are no blogs just yet. Be the first to create a blog.</span><span> We garrantee data preservation, with the following advantage:</span>
-    <ul> <pre>
-   <li style="text-wrap:wrap;"> You can create your own flamboyant poster and or design</li>
-   <li style="text-wrap:wrap;"> Your post and or poster are small format compatible, meaning you can print your site as a blog or web-site and or poster fitting ( smat phone and or Ipad format)</li>
-   <li style="text-wrap:wrap;"> its absolutely free with tight security protocol to protect your information.</li>
-   </pre>
-   </ul>
-   <blockquote>
-   <pre style="font-style:italic"> "to create is to learn and grow",,, <span style="font-size:22px;font-weight:bold">try it out</span><span style="color:red;font-weight:bold;font-size:30px;margin-right:1rem;">!</span></pre>
-   </blockquote>
-   <prev> yours truly Gary Wallace</prev>`;
+        <ul> <pre>
+        <li style="text-wrap:wrap;"> You can create your own flamboyant poster and or design</li>
+        <li style="text-wrap:wrap;"> Your post and or poster are small format compatible, meaning you can print your site as a blog or web-site and or poster fitting ( smat phone and or Ipad format)</li>
+        <li style="text-wrap:wrap;"> its absolutely free with tight security protocol to protect your information.</li>
+        </pre>
+        </ul>
+        <blockquote>
+        <pre style="font-style:italic"> "to create is to learn and grow",,, <span style="font-size:22px;font-weight:bold">try it out</span><span style="color:red;font-weight:bold;font-size:30px;margin-right:1rem;">!</span></pre>
+        </blockquote>
+        <prev> yours truly Gary Wallace</prev>`;
       
     }
     //GETTERS SETTERS
@@ -134,8 +139,8 @@ _onlyMeta:boolean=false;
      //MAIN INJECTION DONE @ Index.tsx//id=client_blog
     async main(item:{parent:HTMLElement,blog:blogType}){
         const {parent,blog}=item;
-        this.blog=blog;
-        this.loadBlog(blog);
+        this._modSelector.loadBlog(blog as blogType);
+        this._blog=blog;
         const paddingInline=window.innerWidth < 900 ? (window.innerWidth < 420 ? "0rem" : "0.5rem") :"1rem"
         DisplayBlog.cleanUp(parent);//cleansup duplicates
         const outerContainer=document.createElement("article");
@@ -176,7 +181,9 @@ _onlyMeta:boolean=false;
         const btnGrp=document.createElement("div");
         btnGrp.style.cssText="display:flex;flex-direction;justify-content:space-between;align-items:center;flex-wrap:wrap;"
         btnGrp.className="btn-group btnGrp justify-content-around gap-2";
-        //SHOWS PAGE
+
+        //----SHOWS PAGE-DOES NOT SHOW BECAUSE ADMIN/IMAGES?IMGKEY issue + gb_logo has http://localhost resolve---//
+
         await this.saveFinalWork(container,blog);
         //SHOWS PAGE
        //RATE SECTION !!!SHOWS RATINGGG
@@ -200,7 +207,8 @@ _onlyMeta:boolean=false;
             btn.className=""
             btn.addEventListener("click",(e:MouseEvent)=>{
             if(e){
-                const blogsUrl=new URL("/",this.baseUrl);
+                this.baseUrl=new URL(window.location.href);
+                const blogsUrl=new URL("/",this.baseUrl.origin);
                 window.location.href=blogsUrl.href;
             }
             });
@@ -227,7 +235,8 @@ _onlyMeta:boolean=false;
                                     localStorage.setItem("user_id",user_id);
 
                                     setTimeout(()=>{
-                                        const blogsUrl=new URL("/editor",this.baseUrl);
+                                        this.baseUrl=new URL(window.location.href);
+                                        const blogsUrl=new URL("/editor",this.baseUrl.origin);
                                         window.location.href=blogsUrl.href;
                                     },200);
                                 }
@@ -245,7 +254,8 @@ _onlyMeta:boolean=false;
             btn1.className=""
             btn1.addEventListener("click",(e:MouseEvent)=>{
                 if(e){
-                    const blogsUrl=new URL("/editor",this.baseUrl);
+                    this.baseUrl=new URL(window.location.href);
+                    const blogsUrl=new URL("/editor",this.baseUrl.origin);
                     window.location.href=blogsUrl.href;
                 }
                 });
@@ -793,7 +803,7 @@ _onlyMeta:boolean=false;
                         if(element.imgKey){
                             const res_= await this._service.getSimpleImg(element.imgKey);
                             if(res_){
-                                // const image=AWSImageLoader({url:res_.img,width:width,quality:75});
+                               
                                 (res.ele as HTMLImageElement).src=res_.img;
                                 (res.ele as HTMLImageElement).alt=res_.Key as string;
                             }
@@ -1212,33 +1222,6 @@ _onlyMeta:boolean=false;
 
     }
   
-     saveBlog(parent:HTMLElement,target:HTMLElement|null,blog:blogType):void{
-        const url="/api/blog"
-        localStorage.setItem("blog",JSON.stringify(blog));
-        const option={
-            headers:{
-                "Content-Type":"application/json",
-            },
-            method:"POST",
-            body:JSON.stringify(blog)
-        };
-        fetch(url,option).then(async(res)=>{
-                const body= await res.json() as blogType;
-                this._blog=body as blogType;
-                this.blog=this._blog;
-               
-            // closing signin
-            if( target){
-            Misc.growOut({anchor:target,scale:0,opacity:0,time:400});
-            setTimeout(()=>{
-                parent.removeChild(target);
-            },390);
-            }
-            Misc.message({parent,msg:"saved",type_:"success",time:600});
-           
-            
-        }).catch((err)=>{console.log(err.message)});
-    }
     loadBlog(blog:blogType){
         this._blog=blog;
         this._selectors=blog.selectors;

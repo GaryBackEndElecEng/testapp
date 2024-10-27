@@ -52,9 +52,6 @@ function Index({ id }: { id: number }) {
                 fetch(url_id, option).then(async (res) => {
                     if (res && target && count === 0) {
                         const body = await res.json() as blogType;
-                        const thisBlog = await _modSelector.awaitBlog(body as blogType);
-                        thisBlog.blog();//setting params in modSelector
-                        // const message = new Message(_modSelector, _service, body);
                         const message = new Message(_modSelector, _service, body);
                         const displayBlog = new DisplayBlog(_modSelector, _service, user, shapeOutside, code, chart, message);
                         displayBlog._onlyMeta = true;

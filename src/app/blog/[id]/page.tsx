@@ -8,7 +8,7 @@ import { redirect } from 'next/navigation';
 
 type Props = {
     params: { id: string }
-    searchParams: { [key: string]: string | string[] | undefined }
+    // searchParams: { [key: string]: string | string[] | undefined }
 }
 
 // const baseUrl = process.env.NODE_ENV === "production" ? process.env.NEXTAUTH_URL as string : "http:///localhost:3000";
@@ -20,15 +20,16 @@ type Props = {
 //     //GENERATES AVAILABLE IDS FOR SINGLE PULL
 // }
 
-export default async function page({ params }: { params: { id: string } }) {
-    const id = Number(params.id as string);
+
+export default async function page({ params }: Props) {
+    const { id } = params;
     // console.log("page", params, id)
     // const check1: { id: number | null, user_id: string | null } = await Meta.blogExist({ id: id });//issue
     const style: { [key: string]: string } = { minHeight: "100vh", height: "100%" };
     // if (check1.id) {
     return (
         <div style={style}>
-            <Index id={id} />
+            <Index id={parseInt(id)} />
         </div>
     )
     // }

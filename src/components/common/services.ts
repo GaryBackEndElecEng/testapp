@@ -421,8 +421,8 @@ class Service {
         return fetch(`${this.urlGetImg}/?Key=${Key}`).then(async(res)=>{
             if(res.ok){
                 const getimg:gets3ImgKey= await res.json();
-                const {Key}=getimg;
-                await this.adminImagecount(Key);//count
+                if(!getimg.img)return null;
+                // await this.adminImagecount(Key);//count
                 return getimg;
             }else{
                 return null ;

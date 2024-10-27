@@ -521,7 +521,7 @@ _onlyMeta:boolean=false;
                         col.style.cssText=col_.cssText;
                         col.className=col_.class.split(" ").filter(cl=>(cl !=="coliIsActive")).join(" ");
                         flex={...flex,colId:col_.eleId,imgKey:col_.imgKey}
-                        await this.showCleanColumnToEle({parent:parent,col:col,col_:col_,flex:flex,maxWidthImg:maxWidthImg}).then(async(resCol)=>{
+                        this.showCleanColumnToEle({parent:parent,col:col,col_:col_,flex:flex,maxWidthImg:maxWidthImg}).then(async(resCol)=>{
                              if(resCol){
  
                                  row.appendChild(resCol);

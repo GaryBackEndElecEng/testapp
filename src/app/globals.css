@@ -25,6 +25,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --background-body: #dce6e7;
   --background-slate: hsl(210, 13%, 50%);
   --background-lightslate: hsl(210, 13%, 70%);
   --box-shadow: 1px 1px 7px 1px #325658, -1px -1px 7px -1px #325658;
@@ -58,7 +59,7 @@ body {
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background: var(--background-body);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

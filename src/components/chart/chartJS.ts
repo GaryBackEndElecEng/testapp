@@ -277,6 +277,7 @@ class ChartJS {
     async mainBarChart(item:{injector:HTMLElement,blog:blogType}){
         const {injector,blog}=item;
         const lenId=this.charts.length;
+        Header.cleanUpByID(injector,"ctx-container-target");
         if(injector.id !=="textarea"){
             injector.style.cssText="min-height:100vh;margin-inline:auto;border-radius:20px;max-width:1000px;min-width:800px;width:100%;position:relative;display:flex;justify-content:center;align-items:center;flex-direction:column;";
         }
@@ -349,6 +350,7 @@ class ChartJS {
         const option=this.bar_options({barData:this.barData,label:"add your data"}) as unknown as optionType;
         await this.addChart({divCont,Ctx:getCtx,option,blog}).then(async(res)=>{
             if(res){
+                
                 this.barOption=res.option as barOptionType;
                 chart=new Chart(res.Ctx,this.barOption)
                 res.divCont.setAttribute("data-placement",String(this.placement));

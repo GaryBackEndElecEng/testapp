@@ -4,24 +4,24 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
     title: {
-        default: "chart",
-        template: `%s | chart`,
+        default: "blogs",
+        template: `%s | blogs`,
 
     },
-    description: "create a Chart",
-    keywords: ["custom charts", "realtime climate change", "make your own graph", "helping you connect", "free Graph making"],
+    description: "Comment page",
+    keywords: ["comments and messages", "comments", "ask Us something", "helping you connect", " message board"],
 
     alternates: {
-        canonical: "/chart",
+        canonical: "/blogs",
         languages: {
             "en-US": "/en-US",
             "fr-CA": "/fr-CA"
         }
     },
     openGraph: {
-        title: "Charts",
-        description: 'Customize your chart, free for all',
-        url: "/chart",
+        title: "Blogs",
+        description: 'blogs',
+        url: "/blogs",
         images: [
             {
                 url: "/images/gb_logo.png",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
         ],
     }
 }
-export default function chartlayout({
+export default function bloglayout({
     children,
 }: {
     children: React.ReactNode

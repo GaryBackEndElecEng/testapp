@@ -64,7 +64,7 @@ class Meta{
            
             
             description: "Comment page",
-            keywords:kwords,
+            keywords:[ "comments and messages", "comments", "ask Us something", "helping you connect", " message board"],
             
             alternates: {
                 canonical: "/blogs",

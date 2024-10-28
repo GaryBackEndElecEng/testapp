@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Footer from "@/components/footer/Footer";
-// import Header from "@/components/nav/Header";
+import Header from "@/components/nav/Header";
 const baseUrl = process.env.NODE_ENV === "production" ? process.env.NEXTAUTH_URL as string : "http://localhost:3000";
 
 
@@ -100,7 +100,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body style={{ margin: "0px", minHeight: "110vh" }}>
-        {/* <Header /> */}
+        <Header />
         {children}
         <Footer />
       </body>

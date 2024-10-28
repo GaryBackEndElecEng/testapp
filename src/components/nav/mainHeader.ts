@@ -8,23 +8,24 @@ import Profile from "../editor/profile";
 import Misc from "../common/misc";
 import Header from "../editor/header";
 import Dataflow from "../common/dataflow";
-import Meta from "../meta/meta";
+// import Meta from "../meta/meta";
 import NavArrow from "./arrow";
 import RegSignIn from "./regSignin";
 
 class MainHeader{
-    meta:Meta
+   
     logo:string;
     static navUrl=[{id:0,name:"home",url:"/"},{id:1,name:"terms-of-service",url:"/termsOfServce"},{id:2,name:"blogs",url:"/blogs"},{id:3,name:"privacy",url:"/privacy"},]
-static injector:HTMLElement;
-static header:HTMLElement|null;
-bgColor:string;
-btnColor:string;
-static mainHeader_css:string;
-dataflow:Dataflow;
-static links:linkType[]=[{name:"home",link:"/"},{name:"editor",link:"/editor"},{name:"blogs",link:"/blogs"}]
-pic="/images/gb_logo.png";
-count:number=0;
+    static injector:HTMLElement;
+    static header:HTMLElement|null;
+    bgColor:string;
+    btnColor:string;
+    static mainHeader_css:string;
+    dataflow:Dataflow;
+    static links:linkType[]=[{name:"home",link:"/"},{name:"editor",link:"/editor"},{name:"blogs",link:"/blogs"}]
+    pic="/images/gb_logo.png";
+    count:number=0;
+    pages:{page:string,redir:RegExp,match:RegExp}[];
 
     constructor(private _modSelector:ModSelector,private auth:AuthService,private _service:Service,private _user:User,private nav:Nav,private regSignin:RegSignIn,private _profile:Profile,private _navArrow:NavArrow){
         this.bgColor="#0C090A";
@@ -33,13 +34,26 @@ count:number=0;
         
         this.dataflow= new Dataflow(this._service);
         this.logo="gb_logo.png"
-        this.meta=new Meta();
+        
+        this.pages=[
+            {page:'/az',redir:/\/[a-z]{1,3}\//,match:/\//},
+            {page:'/blog/',redir:/\/(blog)\/[0-9]+[a-z\/]+/,match:/\/(blog)\/[0-9]+/},
+            {page:'/blogs',redir:/\/(blogs)[a-zA-Z\/]+/,match:/\/(blogs)/},
+            {page:"/register",redir:/\/(register)[a-zA-Z\/]+/,match:/\/(register)/},
+            {page:"/editor",redir:/\/(editor)[a-zA-Z\/]+/,match:/\/(editor)/},
+            {page:"/policy",redir:/\/(policy)[a-zA-Z\/]+/,match:/\/(policy)/},
+            {page:"/termsOfService",redir:/\/(termsOfService)[a-zA-Z\/]+/,match:/\/(termsOfService)/},
+            {page:"/admin",redir:/\/(admin)[a-zA-Z\/]+/,match:/\/(admin)/},
+            {page:"/error_page",redir:/\/(error_page)[a-zA-Z\/]+/,match:/\/(error_page)/},
+            {page:"/posts",redir:/\/(posts)[a-zA-Z\/]+/,match:/\/(posts)/},
+  
+          ]
        
     }
     textFlow="Create your own flexible page to download."
     //INJECTOR
     async main(parent:HTMLElement){
-        this.meta.checkPathname();// redirecting to error page if error
+        this.checkPathname();// redirecting to error page if error
         MainHeader.injector=parent;
         //SETTING WIDTH
         let width_:number;
@@ -86,7 +100,7 @@ count:number=0;
                                         await this.ablogroom({parent:res.parent,user:null});
                                             //page count shown
                                         }
-                                        this.genPageCount(MainHeader.header as HTMLElement);
+                                        // this.genPageCount(MainHeader.header as HTMLElement);
                                  },4970);
                             }
                         }); //drop-down
@@ -101,7 +115,7 @@ count:number=0;
                     if(res){
                         if(res.parent ){
                             //NOT LOGGED IN
-                            this.genPageCount(MainHeader.header as HTMLElement);
+                            // this.genPageCount(MainHeader.header as HTMLElement);
     
                         }
                     }
@@ -202,7 +216,7 @@ count:number=0;
         if(!pg) return;
         //ensuring to count page based on landed pages from match RegExp
         const blog_id=pg.split("/")[2] ? parseInt(pg.split("/")[2]) as number : undefined
-        this.meta.pages.map(page=>{
+        this.pages.map(page=>{
             if((page.match.test(pg)) && this.count===0){
                 this.count++;
                 this._service.getPageCount(pg,blog_id).then(async(res)=>{
@@ -236,10 +250,18 @@ count:number=0;
                     });
             }
         });
-
-                
+    };
+    checkPathname(){
+        const url=new URL(window.location.href);
+        const pathname=url.pathname;
+        this.pages.map(page=>{
+          if((page.redir.test(pathname))){
+            const newUrl=new URL(`/error_page?misc=${pathname}&intent=${page.page}`,url.origin);
+            window.location.replace(newUrl.href);
+          }
+        });
        
-    }
+      }
    
     static closeNav(logoCont:HTMLElement){
         //THIS CLOSES THE NAV IF OPEN AND MOUSECLICK IS DETECTED ON BODY

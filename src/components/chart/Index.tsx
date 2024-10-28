@@ -16,9 +16,8 @@ export default function Index() {
         if (typeof window !== "undefined" && refChart.current) {
             const climate = new Climate();
             const modSelector = new ModSelector();
-            const auth = new AuthService(modSelector);
-            const service = new Service(modSelector, auth);
-            const user = new User(modSelector, service, auth);
+            const service = new Service(modSelector);
+            const user = new User(modSelector, service);
             const chart = new ChartJS(modSelector, service, user);
             const docChart = document.getElementById("chart") as HTMLElement;
             Header.cleanUp(docChart);

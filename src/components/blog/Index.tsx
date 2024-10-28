@@ -30,10 +30,8 @@ function Index({ id }: { id: number }) {
             const maxWidth = window.innerWidth < 900 ? "none" : "75%";
             const target = document.querySelector("section#client_blog") as HTMLElement;
             if (target) {
-
-                const auth = new AuthService(_modSelector);
-                const _service = new Service(_modSelector, auth);
-                const user = new User(_modSelector, _service, auth);
+                const _service = new Service(_modSelector);
+                const user = new User(_modSelector, _service);
                 const shapeOutside = new ShapeOutside(_modSelector, _service, user);
                 const code = new NewCode(_modSelector, _service, user);
                 const chart = new ChartJS(_modSelector, _service, user);

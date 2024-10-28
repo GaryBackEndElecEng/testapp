@@ -25,27 +25,25 @@ function Index() {
     React.useEffect(() => {
         if (typeof window !== "undefined" && navRef.current) {
             const inject = document.getElementById("headerInjector") as HTMLElement;
-            // const modSelector = new ModSelector();
-            // const auth = new AuthService(modSelector);
-            // const service = new Service(modSelector, auth);
-            // const user = new User(modSelector, service, auth);
-            // const chart = new ChartJS(modSelector, service, user);
-            // const feature = new Features();
-            // const regSignin = new RegSignIn(modSelector, service, user);
-            // const metaBlog = new MetaBlog(modSelector, service, user);
-            // const post = new Post(modSelector, service, user);
-            // const profile = new Profile(modSelector, service, auth, user, metaBlog, chart, post);
-            // const navArrow = new NavArrow(user, regSignin, service, profile, modSelector, feature);
-            // const nav = new Nav(modSelector, auth, service, user, regSignin);
-            // if (user_) {
-            //     user.user = user_;
-            //     auth.user = user_;
-            // }
-            // const mainHeader = new MainHeader(modSelector, auth, service, user, nav, regSignin, profile, navArrow);
-            //REMOVE NAVARROW FROM HEADER AFTER WORKING ON NAV!!!!
-            // mainHeader.main(inject as HTMLElement)
-            const testHeader = new TestHeader();
-            testHeader.main({ parent: inject, session: session });
+            const modSelector = new ModSelector();
+            const service = new Service(modSelector);
+            const user = new User(modSelector, service);
+            const auth = new AuthService(modSelector, service, user);
+            const chart = new ChartJS(modSelector, service, user);
+            const feature = new Features();
+            const regSignin = new RegSignIn(modSelector, service, user);
+            const metaBlog = new MetaBlog(modSelector, service, user);
+            const post = new Post(modSelector, service, user);
+            const profile = new Profile(modSelector, service, auth, user, metaBlog, chart, post);
+            const navArrow = new NavArrow(user, regSignin, service, profile, modSelector, feature);
+            const nav = new Nav(modSelector, auth, service, user, regSignin);
+            if (session) {
+                auth.getUser({ session: session });
+            }
+            const mainHeader = new MainHeader(modSelector, auth, service, user, nav, regSignin, profile, navArrow);
+            mainHeader.main(inject as HTMLElement)
+            // const testHeader = new TestHeader();
+            // testHeader.main({ parent: inject, session: session });
         }
     }, [session]);
     return (

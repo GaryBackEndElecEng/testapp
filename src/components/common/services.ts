@@ -56,13 +56,15 @@ class Service {
     showCustomHeader:boolean;
     showHeader:boolean;
     element:elementType | element_selType | undefined;
+    isSignedOut:boolean;
     // getInitBlog:blogType;
-    constructor(private _modSelector:ModSelector,private _auth:AuthService){
+    constructor(private _modSelector:ModSelector){
         this.showCustomHeader=false;
         this.showHeader=false;
         this.bgColor=this._modSelector._bgColor;
         this.btnColor=this._modSelector.btnColor;
         this.user=this._modSelector._user;
+        this.isSignedOut=false;
     }
 ///GETTERS SETTERS///////////////////
  getNewmaster(){
@@ -397,7 +399,7 @@ class Service {
         localStorage.removeItem("email");
         localStorage.removeItem("count");
         Header.cleanUpByID(Nav.navHeader,"user-signature");
-        this._auth.user={} as userType;
+        this.isSignedOut=true;
         const loc=url.pathname;
         if(loc==="/admin"){
             await signOut()

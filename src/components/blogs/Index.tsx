@@ -15,8 +15,7 @@ export default function Index() {
         if (typeof window !== "undefined" && inRef.current) {
             const url = `/api/savegetblog`;
             const modSelector = new ModSelector();
-            const auth = new AuthService(modSelector);
-            const service = new Service(modSelector, auth);
+            const service = new Service(modSelector);
             const initBlogs = new Blogs(modSelector, service);
             const injectBlogs = document.getElementById("injectBlogs") as HTMLElement;
             const option = {

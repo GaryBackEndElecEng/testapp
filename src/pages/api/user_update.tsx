@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { userType } from "@/components/editor/Types";
 import { getErrorMessage } from "@/lib/errorBoundaries";
 import { genHash, hashComp } from "@/lib/ultils/bcrypt";
-import { getUserImage } from "@/lib/awsFunctions";
+import { awsImage, getUserImage } from "@/lib/awsFunctions";
 
 const prisma = new PrismaClient();
 export type passwordType = { passNew: string, passOld: string } | null;
@@ -136,8 +136,39 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 await prisma.$disconnect();
             }
         }
-
-
+    }
+    if (req.method === "GET") {
+        const { email } = req.query as { email: string };
+        try {
+            const user = await prisma.user.findUnique({
+                where: { email: email },
+                select: {
+                    id: true,
+                    email: true,
+                    image: true,
+                    imgKey: true,
+                    bio: true,
+                    showinfo: true,
+                    admin: true,
+                    username: true,
+                    sessions: true
+                }
+            });
+            if (user) {
+                const getUser = user as unknown as userType
+                if (getUser.imgKey) {
+                    getUser.image = await awsImage(getUser.imgKey);
+                    res.status(200).json(getUser);
+                } else {
+                    res.status(200).json(user);
+                }
+            }
+        } catch (error) {
+            const msg = getErrorMessage(error);
+            console.log(msg);
+        } finally {
+            await prisma.$disconnect();
+        }
     }
 
 

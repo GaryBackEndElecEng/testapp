@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/nav/Header";
+import Providers from "./providers";
 const baseUrl = process.env.NODE_ENV === "production" ? process.env.NEXTAUTH_URL as string : "http://localhost:3000";
 
 
@@ -100,9 +101,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body style={{ margin: "0px", minHeight: "110vh" }}>
-        <Header />
-        {children}
-        <Footer />
+        <Providers>
+          <Header />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

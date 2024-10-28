@@ -21,7 +21,7 @@ class MainHeader{
     bgColor:string;
     btnColor:string;
     static mainHeader_css:string;
-    dataflow:Dataflow;
+    // dataflow:Dataflow;
     static links:linkType[]=[{name:"home",link:"/"},{name:"editor",link:"/editor"},{name:"blogs",link:"/blogs"}]
     pic="/images/gb_logo.png";
     count:number=0;
@@ -32,7 +32,7 @@ class MainHeader{
         this.btnColor=this._modSelector.btnColor;
         MainHeader.mainHeader_css=`width:100%;height:5vh;box-shadow:1px 1px 5px 1px black,-1px -1px 5px -1px black;margin-block:0px;position:relative;background:${this.bgColor};display:flex;justify-content:space-between;`;
         
-        this.dataflow= new Dataflow(this._service);
+        // this.dataflow= new Dataflow(this._service);
         this.logo="gb_logo.png"
         
         this.pages=[
@@ -53,7 +53,7 @@ class MainHeader{
     textFlow="Create your own flexible page to download."
     //INJECTOR
     async main(parent:HTMLElement){
-        this.checkPathname();// redirecting to error page if error
+        // this.checkPathname();// redirecting to error page if error
         MainHeader.injector=parent;
         //SETTING WIDTH
         let width_:number;
@@ -85,25 +85,25 @@ class MainHeader{
                 if(res){
                     if(res.parent ){
                         //NOT LOGGED IN
-                        this.showAblogRoom({parent:res.parent,user:user}).then(async(res_)=>{
-                            if(res_){
-                                setTimeout(async()=>{
-                                    res.parent.removeChild(res_.rec);
-                                    if(res.user){
-                                        //GENERAL INFO
-                                            const admin=user.admin;
-                                            if(admin){
-                                                Misc.msgSourceImage({parent:res.parent,msg:"You have admin Rights",src:this.logo,width:125,quality:75,time:2200,cssStyle:{boxShadow:"1px 1px 12px 1px white",backgroundColor:"black",color:"white",inset:"680% 0% 70% 0%"}});
-                                            }
-                                    }else{
-                                        //small ablogrooom signature shown
-                                        await this.ablogroom({parent:res.parent,user:null});
-                                            //page count shown
-                                        }
-                                        // this.genPageCount(MainHeader.header as HTMLElement);
-                                 },4970);
-                            }
-                        }); //drop-down
+                        // this.showAblogRoom({parent:res.parent,user:user}).then(async(res_)=>{
+                        //     if(res_){
+                        //         setTimeout(async()=>{
+                        //             res.parent.removeChild(res_.rec);
+                        //             if(res.user){
+                        //                 //GENERAL INFO
+                        //                     const admin=user.admin;
+                        //                     if(admin){
+                        //                         Misc.msgSourceImage({parent:res.parent,msg:"You have admin Rights",src:this.logo,width:125,quality:75,time:2200,cssStyle:{boxShadow:"1px 1px 12px 1px white",backgroundColor:"black",color:"white",inset:"680% 0% 70% 0%"}});
+                        //                     }
+                        //             }else{
+                        //                 //small ablogrooom signature shown
+                        //                 await this.ablogroom({parent:res.parent,user:null});
+                        //                     //page count shown
+                        //                 }
+                        //                 // this.genPageCount(MainHeader.header as HTMLElement);
+                        //          },4970);
+                        //     }
+                        // }); //drop-down
 
                     }
                 }

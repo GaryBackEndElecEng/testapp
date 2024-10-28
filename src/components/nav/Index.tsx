@@ -19,8 +19,8 @@ import Post from '../posts/post';
 function Index({ user_ }: { user_: userType | undefined }) {
     const navRef = React.useRef(null);
     React.useEffect(() => {
-        const inject = document.getElementById("headerInjector");
-        if (inject && navRef.current) {
+        if (typeof window !== "undefined" && navRef.current) {
+            const inject = document.getElementById("headerInjector") as HTMLElement;
             const modSelector = new ModSelector();
             const auth = new AuthService(modSelector);
             const service = new Service(modSelector, auth);

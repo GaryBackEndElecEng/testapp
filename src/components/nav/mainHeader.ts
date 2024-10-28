@@ -70,8 +70,6 @@ class MainHeader{
         this._navArrow.rotateArrow({button,time:800});//arrow navigator
         MainHeader.header.appendChild(button);
         parent.appendChild(MainHeader.header);
-       
-        if(typeof window !=="undefined"){
           //ADMIN DISPLAY
           if(!MainHeader.header) return;
           //ADMIN DISPLAY
@@ -121,7 +119,7 @@ class MainHeader{
                     }
                     });
             }
-        }
+        
         
        
     }
